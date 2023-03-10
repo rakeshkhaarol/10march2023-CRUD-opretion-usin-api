@@ -14,3 +14,13 @@ footer{
     height: 100%;
     border: 1px dashed blue ;
 }
+.not{
+    height: 300px;
+    width: 300px;
+    background: wheat;
+    text-align: center;
+    margin-left: 400px;
+    margin-top: 200px;
+    line-height: 200px;
+    
+}

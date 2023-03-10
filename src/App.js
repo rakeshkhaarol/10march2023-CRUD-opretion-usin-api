@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
+import Notfound from './pages/Notfound';
 
 
 
@@ -25,6 +26,7 @@ export default function App() {
                     <Route path='register' element={<Register/>} ></Route>
                 </Route>
                     <Route path='/login' element={<Login/>}></Route>
+                    <Route path='*' element={<Notfound/>}></Route>
                 
             </Routes>
         </BrowserRouter>

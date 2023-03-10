@@ -12,7 +12,11 @@ function Login() {
 
     //2.1 Hooks Area
     //Hooks Veriable 
+    //const [variablename,setVeriableName]= useState(['initialvalue']);
     const [teacher, setTeacher]= useState([]);
+
+    //students ko show karne ke liye create Hook Varible
+    const [studentShow,setStudentShow]= useState([])
     
 
 
@@ -30,6 +34,23 @@ function Login() {
             console.log(data.data)
         })
         .catch((arr)=>{ console.log(arr)});
+    },[]);
+
+    //page relode update student table
+    useEffect(()=>{
+        fetch(`http://localhost:1337/api/students`,{
+            method:'GET'
+        })
+        .then((res)=>{
+            return res.json()
+        })
+        .then((data)=>{
+            console.log('useEffect',data.data)
+            setStudentShow(data.data);
+        })
+        .catch((err)=>{
+            console.log (err)
+        });
     },[]);
 
 
@@ -58,10 +79,43 @@ function Login() {
         })
         .then((data)=>{
             alert('data saved succesfully')
-            
+            window.location.reload();
             console.log(data)
         })
         .catch(()=>{})
+    }
+
+
+    //student delete
+    let deleteStudent=(e)=>{
+        //alert('hello')
+        let tr = e.target.closest('tr')
+        
+        
+        let stuid = tr.querySelector('td:first-child').innerHTML
+        console.log('event STUDENT ID',stuid)
+
+        let x = window.confirm("Do You Really Want to Delete")
+        console.log(typeof x)
+
+        if(x===true){
+
+            fetch(`http://localhost:1337/api/students/${stuid}`,{
+                method:'DELETE'
+            })
+            .then((res)=>{
+                return res.json()
+            })
+            .then((data)=>{
+                console.log(data.data)
+                tr.remove();
+                alert('Student Deleted Successfully');
+            })
+            .catch((err)=>err);
+        }
+
+        
+
     }
 
 
@@ -111,16 +165,20 @@ function Login() {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>
-                        <Button className='btn btn-success btn-sm' >Viws</Button>
-                        <Button className='btn btn-primary btn-sm' >Adit</Button>
-                        <Button className='btn btn-danger btn-sm' >Delete</Button>
-                    </td>
+                    {
+                        studentShow.map((cv,indx,arr)=>{
+                            return <tr key={indx}>
+                                        <td>{cv.id}</td>
+                                        <td>{cv.attributes.name}</td>
+                                        <td>
+                                            <Button className='btn btn-success btn-sm' >Viws</Button>
+                                            <Button className='btn btn-primary btn-sm' >Adit</Button>
+                                            <Button className='btn btn-danger btn-sm' onClick={(e)=>{deleteStudent(e)}}>Delete</Button>
+                                        </td>
+                                    </tr>
+                                })
+                    }
                     
-                    </tr>
                 </tbody>
             </Table>
         </Container>
